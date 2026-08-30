@@ -24,7 +24,6 @@ namespace ECommerce.Infrastructure.Seeding
                 await SeedIfEmptyAsync<Product>(SeedPath, "Products.json", ct);
 
 
-                await dbContext.SaveChangesAsync(ct);
             } 
             catch (Exception ex)
             {
@@ -50,9 +49,11 @@ namespace ECommerce.Infrastructure.Seeding
             var items = await JsonSerializer.DeserializeAsync<List<T>>(stream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }, ct);
 
             if (items?.Count > 0)
-            {
+            
                 await dbContext.Set<T>().AddRangeAsync(items,ct);
-            }
+
+            await dbContext.SaveChangesAsync(ct);
+
         }
     }
 }
